@@ -1,0 +1,12 @@
+ext {
+    compileSdkVersion = 25
+    targetSdkVersion = 25
+    minSdkVersion = 16
+    buildToolsVersion = '25.0.3'
+
+    supportVersion = '25.3.1'
+
+    dep = [
+            appcompatV7: "com.android.support:appcompat-v7:$supportVersion",
+    ]
+}

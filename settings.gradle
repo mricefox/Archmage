@@ -1,0 +1,3 @@
+include ':app', ':archmage-anno-processor', ':archmage-annotation', ':archmage-runtime'
+project(':app').projectDir = new File(rootDir, 'sample/app')
+rootProject.name = 'archmage-parent'
