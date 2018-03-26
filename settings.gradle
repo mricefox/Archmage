@@ -1,3 +1,13 @@
-include ':app', ':archmage-anno-processor', ':archmage-annotation', ':archmage-runtime', ':archmage-gradle-plugin'
-project(':app').projectDir = new File(rootDir, 'sample/app')
 rootProject.name = 'archmage-parent'
+
+include ':app', ':archmage-anno-processor', ':archmage-annotation', ':archmage-runtime',
+        ':archmage-gradle-plugin', ':hotel', ':ticket', ':share', ':pay', ':foundation'
+
+
+project(':app').projectDir = new File(rootDir, 'sample/app')
+
+project(':hotel').projectDir = new File(rootDir, 'sample/hotel')
+project(':ticket').projectDir = new File(rootDir, 'sample/ticket')
+project(':share').projectDir = new File(rootDir, 'sample/share')
+project(':pay').projectDir = new File(rootDir, 'sample/pay')
+project(':foundation').projectDir = new File(rootDir, 'sample/foundation')
