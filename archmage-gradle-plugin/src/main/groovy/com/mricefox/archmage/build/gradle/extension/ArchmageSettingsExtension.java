@@ -16,7 +16,7 @@ public class ArchmageSettingsExtension {
     private String manifestText;
     private String artifactVersionText;
     private Map<String, String> subProjectPathToDir;
-    private boolean fullSourceModel;
+    private boolean fullSourceMode;
     private URI runtimeJarUri;
 
     public String getManifestText() {
@@ -43,12 +43,12 @@ public class ArchmageSettingsExtension {
         this.subProjectPathToDir = subProjectPathToDir;
     }
 
-    public boolean isFullSourceModel() {
-        return fullSourceModel;
+    public boolean isFullSourceMode() {
+        return fullSourceMode;
     }
 
-    public void setFullSourceModel(boolean fullSourceModel) {
-        this.fullSourceModel = fullSourceModel;
+    public void setFullSourceMode(boolean fullSourceMode) {
+        this.fullSourceMode = fullSourceMode;
     }
 
     public URI getRuntimeJarUri() {
@@ -65,7 +65,7 @@ public class ArchmageSettingsExtension {
                 "manifestText='" + manifestText + '\'' +
                 ", artifactVersionText='" + artifactVersionText + '\'' +
                 ", subProjectPathToDir=" + subProjectPathToDir +
-                ", fullSourceModel=" + fullSourceModel +
+                ", fullSourceMode=" + fullSourceMode +
                 ", runtimeJarUri=" + runtimeJarUri +
                 '}';
     }

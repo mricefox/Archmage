@@ -11,7 +11,6 @@ import org.gradle.api.internal.plugins.DefaultConvention;
 import org.gradle.initialization.DefaultSettings;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -66,7 +65,7 @@ public class ArchmageSettingsPlugin implements Plugin<DefaultSettings> {
     private Set<String> includeSubProjects() {
         Map<String, String> pathsToDir = extension.getSubProjectPathToDir();
 
-        if (extension.isFullSourceModel()) {
+        if (extension.isFullSourceMode()) {
             logger.info("Full source model enable");
 
             extension.getSubProjectPathToDir().entrySet().stream()

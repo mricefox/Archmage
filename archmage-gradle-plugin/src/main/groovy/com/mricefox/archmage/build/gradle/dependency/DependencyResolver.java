@@ -137,6 +137,7 @@ public class DependencyResolver {
         List<MavenArtifactRepository> repositories = project.getRepositories().stream()
                 .filter(artifactRepository -> artifactRepository instanceof MavenArtifactRepository)
                 .map(artifactRepository -> (MavenArtifactRepository) artifactRepository)
+                //todo retrieve artifact in jcenter is pretty slow
                 .filter(mavenArtifactRepository -> !"jcenter.bintray.com".equalsIgnoreCase(mavenArtifactRepository.getUrl().getHost()))
                 .collect(Collectors.toList());
 
