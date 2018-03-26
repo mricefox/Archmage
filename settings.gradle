@@ -1,3 +1,3 @@
-include ':app', ':archmage-anno-processor', ':archmage-annotation', ':archmage-runtime'
+include ':app', ':archmage-anno-processor', ':archmage-annotation', ':archmage-runtime', ':archmage-gradle-plugin'
 project(':app').projectDir = new File(rootDir, 'sample/app')
 rootProject.name = 'archmage-parent'
