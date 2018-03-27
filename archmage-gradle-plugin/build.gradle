@@ -1,9 +1,7 @@
 apply plugin: 'groovy'
-apply plugin: 'maven'
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
     compile "com.android.tools.build:gradle:${ANDROID_GRADLE_PLUGIN_VERSION}"
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.javassist:javassist:3.22.0-GA'
@@ -11,3 +9,17 @@ dependencies {
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+ext {
+    VERSION_NAME = '1.0.0'
+    GROUP = 'com.mricefox.archmage.build.gradle'
+
+    POM_DESCRIPTION = 'Gradle Plug-in for Archmage.'
+    POM_NAME = 'Gradle Plug-in for Archmage'
+    POM_ARTIFACT_ID = 'archmage-gradle-plugin'
+    POM_PACKAGING = 'jar'
+
+    PUBLISH_TO_MAVEN_LOCAL = true
+}
+
+apply from: 'https://gist.githubusercontent.com/MrIceFox/fe62f19f160ccdcb8b193b169ad87249/raw/bd30cf756801af133f1213ba45a254425b35e1e1/gradle-mvn-push.gradle'

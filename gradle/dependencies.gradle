@@ -8,5 +8,6 @@ ext {
 
     dep = [
             appcompatV7: "com.android.support:appcompat-v7:$supportVersion",
+            supportV4  : "com.android.support:support-v4:$supportVersion",
     ]
 }

@@ -2,8 +2,22 @@ apply plugin: 'java-library'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':archmage-annotation')
+    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.0'
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+ext {
+    VERSION_NAME = '1.0.0'
+    GROUP = 'com.mricefox.archmage.processor'
+
+    POM_DESCRIPTION = 'Annotation processor for Archmage.'
+    POM_NAME = 'Annotation processor for Archmage'
+    POM_ARTIFACT_ID = 'archmage-anno-processor'
+    POM_PACKAGING = 'jar'
+
+    PUBLISH_TO_MAVEN_LOCAL = true
+}
+
+apply from: 'https://gist.githubusercontent.com/MrIceFox/fe62f19f160ccdcb8b193b169ad87249/raw/bd30cf756801af133f1213ba45a254425b35e1e1/gradle-mvn-push.gradle'
