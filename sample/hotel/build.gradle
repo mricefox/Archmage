@@ -10,7 +10,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
     }
 
     buildTypes {
@@ -25,4 +24,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile rootProject.ext.dep.appcompatV7
+}
+
+apply plugin: 'archmage-build-plugin'
+
+archmage {
+    exportPackages = ['com.mricefox.archmage.sample.hotel.export']
 }
