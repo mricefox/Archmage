@@ -9,6 +9,7 @@ import com.mricefox.archmage.build.gradle.dependency.DependencyPublisher;
 import com.mricefox.archmage.build.gradle.dependency.DependencyResolver;
 import com.mricefox.archmage.build.gradle.extension.ArchmageExtension;
 import com.mricefox.archmage.build.gradle.internal.Environment;
+import com.mricefox.archmage.build.gradle.internal.Logger;
 import com.mricefox.archmage.build.gradle.module.properties.ActivatorRecordAlterTransform;
 import com.mricefox.archmage.build.gradle.module.properties.ModulePropertiesProcessor;
 
@@ -23,9 +24,9 @@ import org.gradle.api.plugins.PluginContainer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class ArchmageBuildPlugin implements Plugin<Project> {
+    private static final Logger LOGGER = Logger.getLogger(ArchmageBuildPlugin.class);
     private ModulePropertiesProcessor propertiesProcessor;
 
     @Override
@@ -40,6 +41,16 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
 
         propertiesProcessor = new ModulePropertiesProcessor(project);
 
+        //configure annotation processor
+        project.getDependencies().add("annotationProcessor"
+                , "com.mricefox.archmage.processor:archmage-anno-processor:1.0.0");
+//        project.getDependencies().add("annotationProcessor", project.project(":archmage-anno-processor"));
+
+        BaseExtension extension = project.getExtensions().getByType(BaseExtension.class);
+        extension.getDefaultConfig().getJavaCompileOptions().getAnnotationProcessorOptions()
+                .getArguments().put("archmage_module_packageName", ModulePropertiesProcessor.getProjectPackageName(project));
+
+
         if (pluginContainer.hasPlugin(AppPlugin.class)) {
             hookApplicationBuild(project);
         } else if (pluginContainer.hasPlugin(LibraryPlugin.class)) {
@@ -48,20 +59,6 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
     }
 
     private void hookLibraryBuild(Project project) {
-        //configure annotation processor
-//        project.getDependencies().add("annotationProcessor", project.project(":archmage-anno-processor"));
-        project.getDependencies().add("annotationProcessor"
-                , "com.mricefox.archmage.processor:archmage-anno-processor:1.0.0");
-
-        BaseExtension extension = project.getExtensions().getByType(BaseExtension.class);
-        extension.getDefaultConfig().getJavaCompileOptions().getAnnotationProcessorOptions()
-                .getArguments().put("packageName", ModulePropertiesProcessor.getProjectPackageName(project));
-//                .setArguments(
-//                new HashMap<String, String>() {{
-//                    put("packageName", ModulePropertiesProcessor.getProjectPackageName(project));
-//                }}
-//        );
-
         project.getGradle().addListener(new DependencyResolutionListener() {
 
             @Override
