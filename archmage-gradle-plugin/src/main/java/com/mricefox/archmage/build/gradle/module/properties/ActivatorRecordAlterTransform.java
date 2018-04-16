@@ -8,6 +8,7 @@ import com.android.build.api.transform.TransformInvocation;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.ByteStreams;
 import com.mricefox.archmage.build.gradle.internal.Logger;
+import com.mricefox.archmage.build.gradle.internal.Utils;
 
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
@@ -52,6 +53,7 @@ public class ActivatorRecordAlterTransform extends Transform {
     private final Logger logger = Logger.getLogger(ActivatorRecordAlterTransform.class);
     private final Project project;
     private final ModulePropertiesProcessor propertiesProcessor;
+    private String appActivatorClass = null;
 
     public ActivatorRecordAlterTransform(Project project, ModulePropertiesProcessor propertiesProcessor) {
         this.project = project;
@@ -94,23 +96,32 @@ public class ActivatorRecordAlterTransform extends Transform {
         }
 
         transformInvocation.getInputs().forEach(transformInput -> {
-                    transformInput.getDirectoryInputs().forEach(directoryInput -> {
-                        logger.info("InputDir:" + directoryInput.getFile());
+            transformInput.getDirectoryInputs().forEach(directoryInput -> {
+                logger.info("Input directory:" + directoryInput.getFile());
 
-                        File outputDir = transformInvocation.getOutputProvider().getContentLocation(
-                                directoryInput.getFile().getName(),
-                                directoryInput.getContentTypes(),
-                                directoryInput.getScopes(),
-                                Format.DIRECTORY);
-                        logger.info("OutputDir:" + outputDir);
+                String activatorClassName = ModulePropertiesProcessor.getProjectPackageName(project) + ".Activator_$$_";
+                File activatorClassFile = new File(directoryInput.getFile(), Utils.packageToPath(activatorClassName) + ".class");
+                if (activatorClassFile.isFile()) {
+                    logger.info("Activator exists in application, class file:" + activatorClassFile);
+                    appActivatorClass = activatorClassName;
+                }
 
-                        try {
-                            org.apache.commons.io.FileUtils.copyDirectory(directoryInput.getFile(), outputDir);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                File outputDir = transformInvocation.getOutputProvider().getContentLocation(
+                        directoryInput.getFile().getName(),
+                        directoryInput.getContentTypes(),
+                        directoryInput.getScopes(),
+                        Format.DIRECTORY);
+                logger.info("Output directory:" + outputDir);
 
+                try {
+                    org.apache.commons.io.FileUtils.copyDirectory(directoryInput.getFile(), outputDir);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+
+        transformInvocation.getInputs().forEach(transformInput -> {
                     //traverse jar, find and modify ActivatorRecord.class
                     List<String> outputJars = new ArrayList<>();
                     transformInput.getJarInputs().forEach(jarInput -> {
@@ -188,6 +199,10 @@ public class ActivatorRecordAlterTransform extends Transform {
                 .map(ArchmageModuleProperties::getActivatorClassName)
                 .filter(name -> name != null && !name.trim().isEmpty())
                 .collect(Collectors.toList());
+        //append activator in app
+        if (appActivatorClass != null) {
+            activatorClassNames.add(appActivatorClass);
+        }
 
         if (activatorClassNames.isEmpty()) {
             ByteStreams.copy(in, out);
