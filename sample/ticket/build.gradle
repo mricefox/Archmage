@@ -28,7 +28,7 @@ dependencies {
 apply plugin: 'archmage-build-plugin'
 
 archmage {
-    provided(':hotel') {
+    provided(project(':hotel')) {
         importPackages = ['com.mricefox.archmage.sample.hotel.export']
     }
 }
