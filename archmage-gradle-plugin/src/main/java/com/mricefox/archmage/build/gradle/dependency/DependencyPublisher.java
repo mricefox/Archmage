@@ -53,7 +53,7 @@ public class DependencyPublisher {
     public void publish(File originalAar) throws IOException {
         ArchmageExtension extension = project.getExtensions().getByType(ArchmageExtension.class);
         List<String> exportPackages = extension.getExportPackages();
-        String activatorClassName = ModulePropertiesProcessor.getProjectPackageName(project) + ".Activator";
+        String activatorClassName = ModulePropertiesProcessor.getProjectPackageName(project) + ".Activator_$$_";
 
         if (intermediateOutDirectory.isDirectory()) {
             FileUtils.deleteDirectoryContents(intermediateOutDirectory);

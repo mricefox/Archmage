@@ -1,6 +1,5 @@
 package com.mricefox.archmage.build.gradle.extension;
 
-import com.mricefox.archmage.build.gradle.artifact.DependencyConverter;
 import com.mricefox.archmage.build.gradle.internal.Utils;
 
 import org.gradle.api.GradleException;
@@ -24,25 +23,15 @@ public class ArchmageExtension {
         this.project = project;
     }
 
-    public void provided(String path, Closure configureClosure) {
-        Dependency dependency = DependencyConverter.createDependency(project, path, null);
+    public void provided(Object dependencyNotation, Closure configureClosure) {
+        Dependency dependency = project.getDependencies().create(dependencyNotation);
         ArchmageProvidedExtension ext = new ArchmageProvidedExtension();
-        Utils.configureClosureDelegate(ext, configureClosure);
 
+        Utils.configureClosureDelegate(ext, configureClosure);
         if (dependencyToPackages.containsKey(dependency)) {
             throw new GradleException("Archmage provided with duplicate dependency:" + dependency);
         }
         dependencyToPackages.put(dependency, ext.getImportPackages());
-    }
-
-    public void compile(String path, Closure configureClosure) {
-        Dependency dependency = DependencyConverter.createDependency(project, path, configureClosure);
-        project.getConfigurations().getByName("compile").getDependencies().add(dependency);
-    }
-
-    public void compile(String path) {
-        Dependency dependency = DependencyConverter.createDependency(project, path, null);
-        project.getConfigurations().getByName("compile").getDependencies().add(dependency);
     }
 
     public void setExportPackages(List<String> exportPackages) {

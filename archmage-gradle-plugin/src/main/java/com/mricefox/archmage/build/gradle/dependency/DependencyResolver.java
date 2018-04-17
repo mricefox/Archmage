@@ -135,10 +135,9 @@ public class DependencyResolver {
     private boolean resolveExternalDependency(DefaultExternalModuleDependency dependency
             , List<String> importPackages, File classesDirectory) throws IOException {
         List<MavenArtifactRepository> repositories = project.getRepositories().stream()
-                .filter(artifactRepository -> artifactRepository instanceof MavenArtifactRepository)
-                .map(artifactRepository -> (MavenArtifactRepository) artifactRepository)
-                //todo retrieve artifact in jcenter is pretty slow
-                .filter(mavenArtifactRepository -> !"jcenter.bintray.com".equalsIgnoreCase(mavenArtifactRepository.getUrl().getHost()))
+                .filter(repository -> repository instanceof MavenArtifactRepository)
+                .map(repository -> (MavenArtifactRepository) repository)
+//                .filter(repository -> !"jcenter.bintray.com".equalsIgnoreCase(repository.getUrl().getHost()))
                 .collect(Collectors.toList());
 
         for (MavenArtifactRepository repository : repositories) {
@@ -147,8 +146,9 @@ public class DependencyResolver {
             directory.mkdirs();
             File aar = new File(directory, dependency.getName() + '-' + dependency.getVersion() + ".aar");
 
-            try {
-                downloadAar(url, aar);
+            try (OutputStream out = new FileOutputStream(aar);
+                 InputStream in = new URL(url).openStream()) {
+                ByteStreams.copy(in, out);
             } catch (IOException e) {
                 logger.warn(project + " Download aar fail, url:" + url);
                 continue;
@@ -182,17 +182,6 @@ public class DependencyResolver {
                 .append(dependency.getVersion())
                 .append(".aar");
         return url.toString();
-    }
-
-
-    private static void downloadAar(String url, File target) throws IOException {
-        URL source = new URL(url);
-        URLConnection connection = source.openConnection();
-
-        try (OutputStream out = new FileOutputStream(target);
-             InputStream in = connection.getInputStream()) {
-            ByteStreams.copy(in, out);
-        }
     }
 
     private void unzipClassesFromAar(File aar, File targetDirectory) throws IOException {
