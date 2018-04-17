@@ -37,8 +37,8 @@ final class ActivatorRecord {
 
     public static final List<String> getActivatorClasses() {
         if(sActivatorClasses.isEmpty()) {
-            sActivatorClasses.add("com.mricefox.sample.hotel.Activator");
-            sActivatorClasses.add("com.mricefox.sample.main.Activator");
+            sActivatorClasses.add("com.mricefox.sample.hotel.Activator_$$_");
+            sActivatorClasses.add("com.mricefox.sample.main.Activator_$$_");
         }
 
         return sActivatorClasses;
