@@ -49,7 +49,7 @@ public final class Archmage {
                 activator.attach(application);
                 diHook.onActivatorAttachSuccess(className);
             } catch (Exception e) {
-                if (diHook.onActivatorAttachFailure(className, e)) {
+                if (!diHook.onActivatorAttachFailure(className, e)) {
                     throw new ArchmageException(e);
                 }
             }
