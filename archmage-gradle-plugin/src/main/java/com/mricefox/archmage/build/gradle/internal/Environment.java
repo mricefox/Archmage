@@ -6,6 +6,7 @@ import com.google.common.io.ByteStreams;
 
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
+import org.gradle.util.GUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,10 +16,12 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class Environment {
     private static final Logger logger = Logger.getLogger(Environment.class);
+    private static final String DEFAULT_BUNDLE_VERSION = "1.0.0";
 
     private Environment() {
     }
@@ -44,10 +47,16 @@ public class Environment {
     }
 
     private static File downloadBundleIfNotExists(Project project) {
-        File target = new File(getCacheDirectory(), "archmage-runtime-1.0.0-bundle.jar");
+        String bundleVersion = getBundleVersion(project, DEFAULT_BUNDLE_VERSION);
+        String bundleCoordinate =
+                String.format("com/mricefox/archmage/runtime/archmage-runtime/%s/archmage-runtime-%s-bundle.jar", bundleVersion, bundleVersion);
+        File target = new File(getCacheDirectory(), bundleCoordinate);
 
         if (target.isFile()) {
             return target;
+        }
+        if (!target.getParentFile().isDirectory()) {
+            target.getParentFile().mkdirs();
         }
 
         List<MavenArtifactRepository> repositories = project.getRootProject().getBuildscript().getRepositories().stream()
@@ -57,8 +66,7 @@ public class Environment {
                 .collect(Collectors.toList());
 
         for (MavenArtifactRepository repository : repositories) {
-            String url = repository.getUrl().toString()
-                    + "com/mricefox/archmage/runtime/archmage-runtime/1.0.0/archmage-runtime-1.0.0-bundle.jar";
+            String url = repository.getUrl().toString() + bundleCoordinate;
             try (OutputStream out = new FileOutputStream(target);
                  InputStream in = new URI(url).toURL().openStream()) {
                 ByteStreams.copy(in, out);
@@ -69,5 +77,15 @@ public class Environment {
             }
         }
         return target;
+    }
+
+    private static String getBundleVersion(Project project, String defaultVersion) {
+        File gradleProperties = new File(project.getRootProject().getRootDir(), "gradle.properties");
+
+        if (gradleProperties.isFile()) {
+            Properties properties = GUtil.loadProperties(gradleProperties);
+            return properties.getProperty("archmage.runtime.version", defaultVersion);
+        }
+        return defaultVersion;
     }
 }
