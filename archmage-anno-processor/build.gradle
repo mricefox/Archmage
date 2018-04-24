@@ -20,4 +20,4 @@ ext {
     PUBLISH_TO_MAVEN_LOCAL = true
 }
 
-apply from: 'https://gist.githubusercontent.com/MrIceFox/fe62f19f160ccdcb8b193b169ad87249/raw/bd30cf756801af133f1213ba45a254425b35e1e1/gradle-mvn-push.gradle'
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
