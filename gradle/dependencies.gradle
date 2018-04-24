@@ -7,7 +7,8 @@ ext {
     supportVersion = '25.3.1'
 
     dep = [
-            appcompatV7: "com.android.support:appcompat-v7:$supportVersion",
-            supportV4  : "com.android.support:support-v4:$supportVersion",
+            appcompatV7     : "com.android.support:appcompat-v7:$supportVersion",
+            supportV4       : "com.android.support:support-v4:$supportVersion",
+            constraintLayout: "com.android.support.constraint:constraint-layout:1.0.2"
     ]
 }

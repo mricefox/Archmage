@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mricefox.archmage.sample.hotel" />
+    package="com.mricefox.archmage.sample.hotel">
+
+    <application>
+        <activity android:name=".HotelListActivity" />
+    </application>
+</manifest>

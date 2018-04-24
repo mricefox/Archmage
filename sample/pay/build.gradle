@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'archmage-build-plugin'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion

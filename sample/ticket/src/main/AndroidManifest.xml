@@ -1,2 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mricefox.archmage.sample.ticket" />
+    package="com.mricefox.archmage.sample.ticket">
+
+    <application>
+        <activity android:name=".TicketListActivity" />
+    </application>
+</manifest>
+

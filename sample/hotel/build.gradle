@@ -24,10 +24,15 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile rootProject.ext.dep.appcompatV7
+    compile project(':foundation')
 }
 
 apply plugin: 'archmage-build-plugin'
 
 archmage {
+    provided(project(':ticket')) {
+        importPackages = ['com.mricefox.archmage.sample.ticket.export']
+    }
+
     exportPackages = ['com.mricefox.archmage.sample.hotel.export']
 }
