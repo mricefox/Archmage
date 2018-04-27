@@ -28,5 +28,5 @@ dependencies {
     compile rootProject.ext.dep.appcompatV7
     compile rootProject.ext.dep.constraintLayout
     compile 'com.mricefox.archmage.runtime:archmage-runtime:1.0.0'
-    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.0'
+    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.1'
 }

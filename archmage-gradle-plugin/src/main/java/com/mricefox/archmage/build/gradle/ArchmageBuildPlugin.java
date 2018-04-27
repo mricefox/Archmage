@@ -43,7 +43,7 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
 
         //configure annotation processor
         project.getDependencies().add("annotationProcessor"
-                , "com.mricefox.archmage.processor:archmage-anno-processor:1.0.0");
+                , "com.mricefox.archmage.processor:archmage-anno-processor:1.0.1");
 //        project.getDependencies().add("annotationProcessor", project.project(":archmage-anno-processor"));
 
         BaseExtension extension = project.getExtensions().getByType(BaseExtension.class);

@@ -19,7 +19,11 @@ ext {
     POM_ARTIFACT_ID = 'archmage-gradle-plugin'
     POM_PACKAGING = 'jar'
 
-    PUBLISH_TO_MAVEN_LOCAL = true
+//    PUBLISH_TO_MAVEN_LOCAL = true
+
+    BINTRAY_NAME = POM_ARTIFACT_ID
+    BINTRAY_DESCRIPTION = POM_DESCRIPTION
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/gradle-bintray-push.gradle')

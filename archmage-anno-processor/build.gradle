@@ -2,14 +2,14 @@ apply plugin: 'java-library'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.0'
+    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.1'
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 ext {
-    VERSION_NAME = '1.0.0'
+    VERSION_NAME = '1.0.1'
     GROUP = 'com.mricefox.archmage.processor'
 
     POM_DESCRIPTION = 'Annotation processor for Archmage.'
@@ -17,7 +17,11 @@ ext {
     POM_ARTIFACT_ID = 'archmage-anno-processor'
     POM_PACKAGING = 'jar'
 
-    PUBLISH_TO_MAVEN_LOCAL = true
+//    PUBLISH_TO_MAVEN_LOCAL = true
+
+    BINTRAY_NAME = POM_ARTIFACT_ID
+    BINTRAY_DESCRIPTION = POM_DESCRIPTION
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/gradle-bintray-push.gradle')

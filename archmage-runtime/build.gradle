@@ -41,10 +41,14 @@ ext {
     POM_ARTIFACT_ID = 'archmage-runtime'
     POM_PACKAGING = 'aar'
 
-    PUBLISH_TO_MAVEN_LOCAL = true
+//    PUBLISH_TO_MAVEN_LOCAL = true
+
+    BINTRAY_NAME = POM_ARTIFACT_ID
+    BINTRAY_DESCRIPTION = POM_DESCRIPTION
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/gradle-bintray-push.gradle')
 
 //Integrate archmage-runtime.jar and all of its dependencies jar into one bundle.jar
 //The bundle.jar publish to jcenter/maven which is used to compile classes file in export packages 'manually'
