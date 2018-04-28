@@ -3,10 +3,11 @@ include ':archmage-anno-processor', ':archmage-annotation', ':archmage-runtime',
 
 rootProject.name = 'archmage-parent'
 
-include ':app', ':hotel', ':ticket', ':share', ':pay', ':foundation'
+include ':app', ':hotel', ':ticket', ':share', ':pay', ':account', ':foundation'
 project(':app').projectDir = file('sample/app')
 project(':hotel').projectDir = file('sample/hotel')
 project(':ticket').projectDir = file('sample/ticket')
 project(':share').projectDir = file('sample/share')
 project(':pay').projectDir = file('sample/pay')
+project(':account').projectDir = file('sample/account')
 project(':foundation').projectDir = file('sample/foundation')

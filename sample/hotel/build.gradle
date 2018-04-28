@@ -34,5 +34,9 @@ archmage {
         importPackages = ['com.mricefox.archmage.sample.ticket.export']
     }
 
+    provided(project(':account')) {
+        importPackages = ['com.mricefox.archmage.sample.account.export']
+    }
+
     exportPackages = ['com.mricefox.archmage.sample.hotel.export']
 }
