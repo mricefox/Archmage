@@ -5,6 +5,11 @@ Archmage是一个android组件化框架，组件之间可以用类似OSGI的导�
 
 在此基础上，实现了组件之间的服务通信、页面跳转，以及各组件自定义启动任务。
 
+|     module     | archmage-gradle-plugin | archmage-runtime | archmage-annotation |
+| :-------------:| :---------------------:| :--------------: | :-----------------: |
+| latest version | [ ![Download](https://api.bintray.com/packages/mricefox/maven/archmage-gradle-plugin/images/download.svg) ](https://bintray.com/mricefox/maven/archmage-gradle-plugin/_latestVersion) | [ ![Download](https://api.bintray.com/packages/mricefox/maven/archmage-runtime/images/download.svg) ](https://bintray.com/mricefox/maven/archmage-runtime/_latestVersion) | [ ![Download](https://api.bintray.com/packages/mricefox/maven/archmage-annotation/images/download.svg) ](https://bintray.com/mricefox/maven/archmage-annotation/_latestVersion) |
+
+
 ## Getting Started
 
 ### 1. 插件配置
@@ -49,6 +54,13 @@ archmage {
 
 
 ### 2. 运行时代码配置
+#### 添加依赖
+```gradle
+dependencies {
+    compile 'com.mricefox.archmage.runtime:archmage-runtime:1.0.0'
+    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.1'
+}
+```
 #### 初始化
 ```java
 public class SampleApplication extends Application {
@@ -273,4 +285,4 @@ ArchmageAspectPlugins.inst().registerLifecycleHook
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://raw.githubusercontent.com/MrIceFox/Archmage/master/LICENSE) file for details
+This project is licensed under the Apache License, Version 2.0 - see the [LICENSE](https://raw.githubusercontent.com/MrIceFox/Archmage/master/LICENSE) file for details
