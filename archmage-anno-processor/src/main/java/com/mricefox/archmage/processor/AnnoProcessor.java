@@ -102,7 +102,7 @@ public class AnnoProcessor extends AbstractProcessor {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Target.class);
 
         if (elements.isEmpty()) {
-            messager.printMessage(Diagnostic.Kind.WARNING, "No @Target");
+            messager.printMessage(Diagnostic.Kind.NOTE, "No @Target");
             return false;
         }
 
@@ -168,7 +168,7 @@ public class AnnoProcessor extends AbstractProcessor {
                     .append("import com.mricefox.archmage.runtime.ITargetProvider;")
 
                     .append(WARNING)
-                    .append(String.format("public class %s implements ITargetProvider {", simpleName))
+                    .append(String.format("public final class %s implements ITargetProvider {", simpleName))
 
                     //group
                     .append("@Override ")
@@ -203,7 +203,7 @@ public class AnnoProcessor extends AbstractProcessor {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(ServiceImpl.class);
 
         if (elements.isEmpty()) {
-            messager.printMessage(Diagnostic.Kind.WARNING, "No @ServiceImpl");
+            messager.printMessage(Diagnostic.Kind.NOTE, "No @ServiceImpl");
             return;
         }
 
@@ -262,7 +262,7 @@ public class AnnoProcessor extends AbstractProcessor {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Module.class);
 
         if (elements.isEmpty()) {
-            messager.printMessage(Diagnostic.Kind.WARNING, "No @Module");
+            messager.printMessage(Diagnostic.Kind.NOTE, "No @Module");
             return;
         }
 
@@ -301,7 +301,7 @@ public class AnnoProcessor extends AbstractProcessor {
                     .append("import android.app.Application;")
                     .append("import com.mricefox.archmage.runtime.ModuleActivator;")
                     .append(WARNING)
-                    .append(String.format("public class %s extends ModuleActivator {", simpleName))
+                    .append(String.format("public final class %s extends ModuleActivator {", simpleName))
                     .append("@Override ")
                     .append("protected void attach(Application application) {");
 
