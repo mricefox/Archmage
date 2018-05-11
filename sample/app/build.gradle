@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'archmage-build-plugin'
 
 android {
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
@@ -21,12 +22,19 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile rootProject.ext.dep.appcompatV7
-
-    compile project(':hotel')
-    compile project(':ticket')
-    compile project(':share')
-    compile project(':pay')
-    compile project(':account')
+    if (buildPlugin3Enable()) {
+        implementation project(':hotel')
+//        implementation 'com.mricefox.archmage.sample.hotel:hotel:1.0.0'
+        implementation project(':ticket')
+        implementation project(':share')
+        implementation project(':pay')
+        implementation project(':account')
+    } else {
+        compile project(':hotel')
+//        compile 'com.mricefox.archmage.sample.hotel:hotel:1.0.0'
+        compile project(':ticket')
+        compile project(':share')
+        compile project(':pay')
+        compile project(':account')
+    }
 }

@@ -16,6 +16,7 @@
 
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'com.jfrog.bintray'
 
 version = VERSION_NAME
 group = GROUP
@@ -25,16 +26,10 @@ def isReleaseBuild() {
 }
 
 def getReleaseRepositoryUrl() {
-    if (hasProperty('PUBLISH_TO_MAVEN_LOCAL') && Boolean.valueOf(PUBLISH_TO_MAVEN_LOCAL)) {
-        return repositories.mavenLocal().url
-    }
     return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL : ""
 }
 
 def getSnapshotRepositoryUrl() {
-    if (hasProperty('PUBLISH_TO_MAVEN_LOCAL') && Boolean.valueOf(PUBLISH_TO_MAVEN_LOCAL)) {
-        return repositories.mavenLocal().url
-    }
     return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL : ""
 }
 
@@ -92,10 +87,67 @@ afterEvaluate { project ->
                 }
             }
         }
+
+        doLast {
+            println "### Published artifact:\'${GROUP}:${POM_ARTIFACT_ID}:${VERSION_NAME}\' to maven"
+        }
+    }
+
+    uploadMvnLocal {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                pom.groupId = GROUP
+                pom.artifactId = POM_ARTIFACT_ID
+                pom.version = VERSION_NAME
+
+                repository(url: repositories.mavenLocal().url) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+                snapshotRepository(url: repositories.mavenLocal().url) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+
+                pom.project {
+                    name POM_NAME
+                    packaging POM_PACKAGING
+                    description POM_DESCRIPTION
+                    url POM_URL
+
+                    scm {
+                        url POM_SCM_URL
+                        connection POM_SCM_CONNECTION
+                        developerConnection POM_SCM_DEV_CONNECTION
+                    }
+
+                    licenses {
+                        license {
+                            name POM_LICENCE_NAME
+                            url POM_LICENCE_URL
+                            distribution POM_LICENCE_DIST
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id POM_DEVELOPER_ID
+                            name POM_DEVELOPER_NAME
+                        }
+                    }
+                }
+            }
+        }
+
+        doLast {
+            println "### Published artifact:\'${GROUP}:${POM_ARTIFACT_ID}:${VERSION_NAME}\' to mavenLocal"
+        }
     }
 
     signing {
-        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+        required {
+            isReleaseBuild() && (gradle.taskGraph.hasTask("uploadArchives") || gradle.taskGraph.hasTask("uploadMvnLocal"))
+        }
         sign configurations.archives
     }
 
@@ -219,6 +271,49 @@ afterEvaluate { project ->
         } else {
             archives sourcesJar
             archives javadocJar
+        }
+    }
+
+    bintrayUpload.dependsOn install
+    bintrayUpload.doLast {
+        println "### Published artifact:\'${GROUP}:${POM_ARTIFACT_ID}:${VERSION_NAME}\' to bintray"
+    }
+}
+
+configurations {
+    mvnLocal.extendsFrom(archives)
+}
+
+task cleanMvnLocal(type: Delete) {
+    delete repositories.mavenLocal().url.toURL().getFile() +
+            GROUP.replace('.', '/') + '/' + POM_ARTIFACT_ID + '/' + VERSION_NAME
+}
+
+bintray {
+    user = BINTRAY_USER
+    key = BINTRAY_KEY
+
+    configurations = ['archives']
+    publish = true
+    override = false
+    dryRun = false
+
+    pkg {
+        repo = BINTRAY_REPO
+        name = BINTRAY_NAME
+        licenses = [BINTRAY_LICENSE]
+        vcsUrl = BINTRAY_VCS_URL
+        desc = BINTRAY_DESCRIPTION
+        websiteUrl = BINTRAY_WEBSITE_URL
+        issueTrackerUrl = BINTRAY_ISSUE_TRACKER_URL
+        publicDownloadNumbers = true
+    }
+}
+
+tasks.getByName("bintrayUpload") {
+    it.doFirst {
+        if (!isReleaseBuild()) {
+            throw new GradleException("bintrayUpload only support release version")
         }
     }
 }

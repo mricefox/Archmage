@@ -23,4 +23,3 @@ ext {
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
-apply from: rootProject.file('gradle/gradle-bintray-push.gradle')

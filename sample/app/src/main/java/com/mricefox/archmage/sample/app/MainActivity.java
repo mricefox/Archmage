@@ -5,10 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.mricefox.archmage.annotation.Target;
 import com.mricefox.archmage.sample.R;
 import com.mricefox.archmage.sample.hotel.HotelListActivity;
 import com.mricefox.archmage.sample.ticket.TicketListActivity;
 
+@Target(path = "/host/Main")
 public class MainActivity extends AppCompatActivity {
 
     @Override

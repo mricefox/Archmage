@@ -5,11 +5,19 @@ buildscript {
 
     repositories {
         mavenLocal()
+        google()
         jcenter()
+        maven {
+            url  "https://dl.bintray.com/mricefox/maven"
+        }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:${ANDROID_GRADLE_PLUGIN_VERSION}"
-        classpath "com.mricefox.archmage.build.gradle:archmage-gradle-plugin:1.0.0"
+        if (project.hasProperty('buildPlugin3Enable') && Boolean.valueOf(buildPlugin3Enable)) {
+            classpath "com.android.tools.build:gradle:3.1.2"
+        } else {
+            classpath "com.android.tools.build:gradle:2.3.3"
+        }
+        classpath "com.mricefox.archmage.build.gradle:archmage-gradle-plugin:1.1.0"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,10 +27,22 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
+        google()
         jcenter()
+        maven {
+            url  "https://dl.bintray.com/mricefox/maven"
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+def buildPlugin3Enable() {
+    return hasProperty('buildPlugin3Enable') && Boolean.valueOf(buildPlugin3Enable)
+}
+
+task cleanMavenLocal(type: Delete) {
+    delete repositories.mavenLocal().url.toURL().getFile() + 'com/mricefox/archmage'
 }

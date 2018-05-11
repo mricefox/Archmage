@@ -22,9 +22,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile rootProject.ext.dep.appcompatV7
-    compile project(':foundation')
+    if (buildPlugin3Enable()) {
+        api project(':foundation')
+//        api 'com.mricefox.archmage.sample.foundation:foundation:1.0.0'
+    } else {
+        compile project(':foundation')
+//        compile 'com.mricefox.archmage.sample.foundation:foundation:1.0.0'
+    }
 }
 
 apply plugin: 'archmage-build-plugin'
@@ -40,3 +44,21 @@ archmage {
 
     exportPackages = ['com.mricefox.archmage.sample.hotel.export']
 }
+
+//test sub module dependence as published aar
+ext {
+    VERSION_NAME = '1.0.0'
+    GROUP = 'com.mricefox.archmage.sample.hotel'
+
+    POM_DESCRIPTION = 'Archmage sample hotel'
+    POM_NAME = 'Archmage sample hotel'
+    POM_ARTIFACT_ID = 'hotel'
+    POM_PACKAGING = 'aar'
+
+    PUBLISH_TO_MAVEN_LOCAL = true
+
+    BINTRAY_NAME = POM_ARTIFACT_ID
+    BINTRAY_DESCRIPTION = POM_DESCRIPTION
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

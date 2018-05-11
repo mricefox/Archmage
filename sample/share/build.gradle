@@ -23,9 +23,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile rootProject.ext.dep.appcompatV7
-    compile project(':foundation')
+    if (buildPlugin3Enable()) {
+        api project(':foundation')
+    } else {
+        compile project(':foundation')
+    }
 }
 
 archmage {

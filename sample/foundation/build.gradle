@@ -24,9 +24,33 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile rootProject.ext.dep.appcompatV7
-    compile rootProject.ext.dep.constraintLayout
-    compile 'com.mricefox.archmage.runtime:archmage-runtime:1.0.0'
-    compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.1'
+    if (buildPlugin3Enable()) {
+        api rootProject.ext.dep.appcompatV7
+        api rootProject.ext.dep.constraintLayout
+        api 'com.mricefox.archmage.runtime:archmage-runtime:1.0.0'
+        api 'com.mricefox.archmage.annotation:archmage-annotation:1.0.1'
+    } else {
+        compile rootProject.ext.dep.appcompatV7
+        compile rootProject.ext.dep.constraintLayout
+        compile 'com.mricefox.archmage.runtime:archmage-runtime:1.0.0'
+        compile 'com.mricefox.archmage.annotation:archmage-annotation:1.0.1'
+    }
 }
+
+//test sub module dependence as published aar
+ext {
+    VERSION_NAME = '1.0.0'
+    GROUP = 'com.mricefox.archmage.sample.foundation'
+
+    POM_DESCRIPTION = 'Archmage sample foundation'
+    POM_NAME = 'Archmage sample foundation'
+    POM_ARTIFACT_ID = 'foundation'
+    POM_PACKAGING = 'aar'
+
+    PUBLISH_TO_MAVEN_LOCAL = true
+
+    BINTRAY_NAME = POM_ARTIFACT_ID
+    BINTRAY_DESCRIPTION = POM_DESCRIPTION
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

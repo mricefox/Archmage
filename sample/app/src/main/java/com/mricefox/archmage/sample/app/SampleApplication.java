@@ -2,6 +2,7 @@ package com.mricefox.archmage.sample.app;
 
 import android.app.Application;
 import android.net.Uri;
+import android.util.Log;
 
 import com.mricefox.archmage.runtime.Archmage;
 import com.mricefox.archmage.runtime.ArchmageAspectPlugins;
@@ -53,7 +54,7 @@ public class SampleApplication extends Application {
         ArchmageAspectPlugins.inst().registerDependencyInjectionHook(new DependencyInjectionHook() {
             @Override
             public void onActivatorAttachSuccess(String activatorClassName) {
-                super.onActivatorAttachSuccess(activatorClassName);
+                Log.d("SampleApplication", "Activator attach success:" + activatorClassName);
             }
 
             @Override
