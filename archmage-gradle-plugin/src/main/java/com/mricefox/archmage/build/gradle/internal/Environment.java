@@ -41,7 +41,7 @@ public class Environment {
         File cacheDirectory =
                 new File(FileUtils.join(System.getProperty("user.home"), ".archmage", "cache"));
         if (!cacheDirectory.isDirectory()) {
-            cacheDirectory.mkdirs();
+            FileUtils.mkdirs(cacheDirectory);
         }
         return cacheDirectory;
     }
@@ -49,17 +49,19 @@ public class Environment {
     private static File downloadBundleIfNotExists(Project project) {
         String bundleVersion = getBundleVersion(project, DEFAULT_BUNDLE_VERSION);
         String bundleCoordinate =
-                String.format("com/mricefox/archmage/runtime/archmage-runtime/%s/archmage-runtime-%s-bundle.jar", bundleVersion, bundleVersion);
+                String.format("com/mricefox/archmage/runtime/archmage-runtime/%s/archmage-runtime-%s-bundle.jar",
+                        bundleVersion, bundleVersion);
         File target = new File(getCacheDirectory(), bundleCoordinate);
 
         if (target.isFile()) {
             return target;
         }
         if (!target.getParentFile().isDirectory()) {
-            target.getParentFile().mkdirs();
+            FileUtils.mkdirs(target.getParentFile());
         }
 
-        List<MavenArtifactRepository> repositories = project.getRootProject().getBuildscript().getRepositories().stream()
+        List<MavenArtifactRepository> repositories = project.getRootProject().getBuildscript().getRepositories()
+                .stream()
                 .filter(repository -> repository instanceof MavenArtifactRepository)
                 .map(repository -> (MavenArtifactRepository) repository)
 //                .filter(repository -> !"jcenter.bintray.com".equalsIgnoreCase(repository.getUrl().getHost

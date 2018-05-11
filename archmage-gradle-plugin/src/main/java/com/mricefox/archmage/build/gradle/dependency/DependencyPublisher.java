@@ -6,7 +6,6 @@ import com.mricefox.archmage.build.gradle.extension.ArchmageExtension;
 import com.mricefox.archmage.build.gradle.internal.Environment;
 import com.mricefox.archmage.build.gradle.internal.Logger;
 import com.mricefox.archmage.build.gradle.internal.Utils;
-import com.mricefox.archmage.build.gradle.module.properties.ModulePropertiesProcessor;
 
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Project;
@@ -33,18 +32,16 @@ public class DependencyPublisher {
     public static final String INTERMEDIATES_OUT = "intermediates/archmage/out";
 
     private final Project project;
-    private final ModulePropertiesProcessor propertiesGenerator;
     private final File intermediateOutDirectory;
 
-    public DependencyPublisher(Project project, ModulePropertiesProcessor propertiesGenerator) {
+    public DependencyPublisher(Project project) {
         this.project = project;
-        this.propertiesGenerator = propertiesGenerator;
         this.intermediateOutDirectory = FileUtils.join(project.getBuildDir(), INTERMEDIATES_OUT);
     }
 
     /**
      * 1.unzip original aar to 'unzipAar' directory
-     * 2.javac export packages, generate .class to unzip directory, generate ArchmageModuleProperties.json
+     * 2.javac export packages, generate .class to unzip directory
      * 3.backup original aar
      * 4.zip 'unzipAar' directory, override original aar
      *
@@ -53,14 +50,13 @@ public class DependencyPublisher {
     public void publish(File originalAar) throws IOException {
         ArchmageExtension extension = project.getExtensions().getByType(ArchmageExtension.class);
         List<String> exportPackages = extension.getExportPackages();
-        String activatorClassName = ModulePropertiesProcessor.getProjectPackageName(project) + ".Activator_$$_";
 
         if (intermediateOutDirectory.isDirectory()) {
             FileUtils.deleteDirectoryContents(intermediateOutDirectory);
         }
 
         File unzipDirectory = FileUtils.join(intermediateOutDirectory, "unzipAar");
-        unzipDirectory.mkdirs();
+        FileUtils.mkdirs(unzipDirectory);
 
         unzipToDirectory(originalAar, unzipDirectory);
 
@@ -75,12 +71,6 @@ public class DependencyPublisher {
                         Environment.getBootClasspath(project),
                         Environment.getClasspath(project));
             }
-        }
-
-        if (activatorExist(new File(unzipDirectory, "classes.jar"), activatorClassName)) {
-            propertiesGenerator.generateProperties(activatorClassName, classesDirectory.getParentFile());
-        } else {
-            propertiesGenerator.generateProperties("", classesDirectory.getParentFile());
         }
 
         //backup original aar
@@ -99,7 +89,7 @@ public class DependencyPublisher {
                 try {
                     String name = entry.getName();
                     if (entry.isDirectory()) {
-                        new File(directory, name).mkdirs();
+                        FileUtils.mkdirs(new File(directory, name));
                     } else {
                         OutputStream out = new FileOutputStream(new File(directory, name));
                         ByteStreams.copy(zis, out);
@@ -125,7 +115,8 @@ public class DependencyPublisher {
                 }
 
                 @Override
-                public FileVisitResult visitFile(Path path, BasicFileAttributes basicFileAttributes) throws IOException {
+                public FileVisitResult visitFile(Path path, BasicFileAttributes basicFileAttributes) throws
+                        IOException {
                     String name = getEntryName(path.toFile());
                     ZipEntry entry = new ZipEntry(name);
                     zos.putNextEntry(entry);
@@ -136,7 +127,8 @@ public class DependencyPublisher {
                 }
 
                 @Override
-                public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes basicFileAttributes) throws IOException {
+                public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes basicFileAttributes) throws
+                        IOException {
                     if (!path.toFile().equals(directory)) {
                         String name = getEntryName(path.toFile());
                         ZipEntry entry = new ZipEntry(name);
@@ -160,23 +152,5 @@ public class DependencyPublisher {
                     put("source", JavaVersion.VERSION_1_7);
                 }}
         );
-    }
-
-    private static boolean activatorExist(File classesJar, String activatorClassName) {
-        try (ZipInputStream zipIn = new ZipInputStream(new FileInputStream(classesJar))) {
-            ZipEntry entry;
-            while ((entry = zipIn.getNextEntry()) != null) {
-                if (!entry.isDirectory()
-                        && activatorClassName.replace('.', '/').concat(".class")
-                        .equals(entry.getName().replaceAll("\\\\", "/"))) {
-                    zipIn.closeEntry();
-                    return true;
-                }
-                zipIn.closeEntry();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 }

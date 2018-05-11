@@ -2,7 +2,7 @@ apply plugin: 'groovy'
 
 dependencies {
     compile gradleApi()
-    compile "com.android.tools.build:gradle:${ANDROID_GRADLE_PLUGIN_VERSION}"
+    compile "com.android.tools.build:gradle:2.2.0"
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.javassist:javassist:3.22.0-GA'
 }
@@ -11,7 +11,7 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 ext {
-    VERSION_NAME = '1.0.0'
+    VERSION_NAME = '1.1.0'
     GROUP = 'com.mricefox.archmage.build.gradle'
 
     POM_DESCRIPTION = 'Gradle Plug-in for Archmage.'
@@ -19,11 +19,8 @@ ext {
     POM_ARTIFACT_ID = 'archmage-gradle-plugin'
     POM_PACKAGING = 'jar'
 
-//    PUBLISH_TO_MAVEN_LOCAL = true
-
     BINTRAY_NAME = POM_ARTIFACT_ID
     BINTRAY_DESCRIPTION = POM_DESCRIPTION
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
-apply from: rootProject.file('gradle/gradle-bintray-push.gradle')

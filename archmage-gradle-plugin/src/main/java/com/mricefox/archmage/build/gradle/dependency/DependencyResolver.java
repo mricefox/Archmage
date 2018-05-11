@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -143,7 +142,7 @@ public class DependencyResolver {
         for (MavenArtifactRepository repository : repositories) {
             String url = concatAarUrl(repository.getUrl(), dependency);
             File directory = FileUtils.join(intermediateInDirectory, "download");
-            directory.mkdirs();
+            FileUtils.mkdirs(directory);
             File aar = new File(directory, dependency.getName() + '-' + dependency.getVersion() + ".aar");
 
             try (OutputStream out = new FileOutputStream(aar);
@@ -160,7 +159,8 @@ public class DependencyResolver {
             for (String pkgName : importPackages) {
                 if (!FileUtils.join(classesDirectory
                         , Utils.packageToPath(pkgName)).exists()) {
-                    throw new GradleException(project + " provided import package:" + pkgName + ", but does not exist in aar:" + aar);
+                    throw new GradleException(project + " provided import package:" + pkgName + ", but does not exist" +
+                            " in aar:" + aar);
                 }
             }
 
@@ -195,7 +195,7 @@ public class DependencyResolver {
                     if (name.startsWith(prefix)) {
                         String flattenName = name.substring(prefix.length());
                         if (entry.isDirectory()) {
-                            new File(targetDirectory, flattenName).mkdirs();
+                            FileUtils.mkdirs(new File(targetDirectory, flattenName));
                         } else {
                             OutputStream out = new FileOutputStream(new File(targetDirectory, flattenName));
                             ByteStreams.copy(zis, out);
