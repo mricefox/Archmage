@@ -1,14 +1,23 @@
 # Archmage
 
-Archmage是一个android组件化框架，组件之间可以用类似OSGI的导入\导出部分包实现互相依赖，最小化依赖范围，从根本上解除耦合。
-> [android组件化协议管理的一种思路](http://www.mricefox.com/2018/04/24/android-modularity-protocal/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)](https://raw.githubusercontent.com/MrIceFox/Archmage/master/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/mricefox/Archmage/pulls) 
 
-在此基础上，实现了组件之间的服务通信、页面跳转，以及各组件自定义启动任务。
+----------
+
+Archmage是一个android组件化框架
+- 组件之间可以用类似OSGI的导入、导出部分包实现provided依赖
+- 组件之间通过接口方式通信
+- scheme路由方式实现Activity跳转、Fragment获取
+- 组件可以自定义轻量、重量启动项，并声明依赖关系
+- 自动注册组件
+- 支持Android gradle plugin 3.0+
+
+原理
+> [android组件化协议管理的一种思路](http://www.mricefox.com/2018/04/24/android-modularity-protocal/)
 
 |     module     | archmage-gradle-plugin | archmage-runtime | archmage-annotation |
 | :-------------:| :---------------------:| :--------------: | :-----------------: |
 | latest version | [ ![Download](https://api.bintray.com/packages/mricefox/maven/archmage-gradle-plugin/images/download.svg) ](https://bintray.com/mricefox/maven/archmage-gradle-plugin/_latestVersion) | [ ![Download](https://api.bintray.com/packages/mricefox/maven/archmage-runtime/images/download.svg) ](https://bintray.com/mricefox/maven/archmage-runtime/_latestVersion) | [ ![Download](https://api.bintray.com/packages/mricefox/maven/archmage-annotation/images/download.svg) ](https://bintray.com/mricefox/maven/archmage-annotation/_latestVersion) |
-
 
 ## Getting Started
 
@@ -282,6 +291,11 @@ ArchmageAspectPlugins.inst().registerLifecycleHook
 ```
 -keep public class * extends com.mricefox.archmage.runtime.ModuleActivator
 ```
+
+### 4. 已知问题
+- 组件独立安装调试
+- 不支持组件间共享资源文件
+- 组件导出包能够引用的类只有android.jar、support-v4、archmage-runtime当中的类
 
 ## License
 
