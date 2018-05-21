@@ -26,7 +26,7 @@ Archmage是一个android组件化框架
 ```gradle
 buildscript {
 	dependencies {
-		classpath "com.mricefox.archmage.build.gradle:archmage-gradle-plugin:1.0.0"	
+		classpath "com.mricefox.archmage.build.gradle:archmage-gradle-plugin:1.1.0"	
 	}
 }
 ```
