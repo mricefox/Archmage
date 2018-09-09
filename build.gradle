@@ -7,9 +7,6 @@ buildscript {
         mavenLocal()
         google()
         jcenter()
-        maven {
-            url  "https://dl.bintray.com/mricefox/maven"
-        }
     }
     dependencies {
         if (project.hasProperty('buildPlugin3Enable') && Boolean.valueOf(buildPlugin3Enable)) {
@@ -29,9 +26,6 @@ allprojects {
         mavenLocal()
         google()
         jcenter()
-        maven {
-            url  "https://dl.bintray.com/mricefox/maven"
-        }
     }
 }
 

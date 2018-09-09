@@ -17,8 +17,6 @@ ext {
     POM_ARTIFACT_ID = 'archmage-anno-processor'
     POM_PACKAGING = 'jar'
 
-//    PUBLISH_TO_MAVEN_LOCAL = true
-
     BINTRAY_NAME = POM_ARTIFACT_ID
     BINTRAY_DESCRIPTION = POM_DESCRIPTION
 }
