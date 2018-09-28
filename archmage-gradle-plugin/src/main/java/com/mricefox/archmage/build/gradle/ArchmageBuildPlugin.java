@@ -96,7 +96,9 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
                         File outputJar = dependency.resolve();
 
                         if (outputJar != null) {
-                            project.getDependencies().add("provided", project.files(outputJar));
+                            boolean plugin3Enable = project.hasProperty("buildPlugin3Enable")
+                                    && Boolean.valueOf(String.valueOf(project.getProperties().get("buildPlugin3Enable")));
+                            project.getDependencies().add(plugin3Enable ? "compileOnly" : "provided", project.files(outputJar));
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

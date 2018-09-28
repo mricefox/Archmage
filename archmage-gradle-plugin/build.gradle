@@ -11,7 +11,7 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 ext {
-    VERSION_NAME = '1.1.0'
+    VERSION_NAME = '1.1.1'
     GROUP = 'com.mricefox.archmage.build.gradle'
 
     POM_DESCRIPTION = 'Gradle Plug-in for Archmage.'
