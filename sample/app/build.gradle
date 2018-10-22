@@ -29,6 +29,7 @@ dependencies {
         implementation project(':share')
         implementation project(':pay')
         implementation project(':account')
+        implementation project(':kotlin-module')
     } else {
         compile project(':hotel')
 //        compile 'com.mricefox.archmage.sample.hotel:hotel:1.0.0'
@@ -36,5 +37,6 @@ dependencies {
         compile project(':share')
         compile project(':pay')
         compile project(':account')
+        compile project(':kotlin-module')
     }
 }

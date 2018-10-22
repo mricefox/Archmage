@@ -4,8 +4,6 @@ import com.android.build.gradle.AppExtension;
 import com.android.build.gradle.AppPlugin;
 import com.android.build.gradle.LibraryExtension;
 import com.android.build.gradle.LibraryPlugin;
-import com.android.build.gradle.api.ApplicationVariant;
-import com.android.build.gradle.api.LibraryVariant;
 import com.android.utils.FileUtils;
 import com.mricefox.archmage.build.gradle.dependency.DependencyPublisher;
 import com.mricefox.archmage.build.gradle.dependency.DependencyResolver;
@@ -23,9 +21,14 @@ import org.gradle.api.Task;
 import org.gradle.api.artifacts.DependencyResolutionListener;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.plugins.PluginContainer;
+import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin;
+import org.jetbrains.kotlin.gradle.plugin.KaptAnnotationProcessorOptions;
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension;
 
 import java.io.File;
 import java.io.IOException;
+
+import groovy.lang.Closure;
 
 
 public class ArchmageBuildPlugin implements Plugin<Project> {
@@ -40,11 +43,6 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
         }
 
         project.getExtensions().create("archmage", ArchmageExtension.class, project);
-
-        //configure annotation processor
-        project.getDependencies().add("annotationProcessor"
-                , "com.mricefox.archmage.processor:archmage-anno-processor:1.0.2");
-//        project.getDependencies().add("annotationProcessor", project.project(":archmage-anno-processor"));
 
         /*
         * Since android-gradle-plugin 3.0 change the return type of method BaseExtension.getDefaultConfig from
@@ -72,14 +70,7 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
     }
 
     private void hookLibraryBuild(Project project) {
-        project.getExtensions().getByType(LibraryExtension.class).getLibraryVariants().all(new Action<LibraryVariant>
-                () {
-            @Override
-            public void execute(LibraryVariant variant) {
-                variant.getJavaCompile().getOptions().getCompilerArgs()
-                        .add("-Aarchmage_module_packageName=" + Utils.getProjectPackageName(project));
-            }
-        });
+        configureAnnoProcessor(project, false);
 
         project.getGradle().addListener(new DependencyResolutionListener() {
 
@@ -143,15 +134,36 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
     }
 
     private void hookApplicationBuild(Project project) {
-        project.getExtensions().getByType(AppExtension.class).getApplicationVariants().all(new Action<ApplicationVariant>() {
-            @Override
-            public void execute(ApplicationVariant variant) {
-                variant.getJavaCompile().getOptions().getCompilerArgs()
-                        .add("-Aarchmage_module_packageName=" + Utils.getProjectPackageName(project));
-            }
-        });
+        configureAnnoProcessor(project, true);
 
         project.getExtensions().getByType(AppExtension.class)
                 .registerTransform(new ActivatorRecordModifyTransform(project));
+    }
+
+    private void configureAnnoProcessor(Project project, boolean app) {
+        boolean isKotlin = project.getPlugins().hasPlugin(Kapt3GradleSubplugin.class);
+
+        project.getDependencies().add(isKotlin ? "kapt" : "annotationProcessor"
+                , "com.mricefox.archmage.processor:archmage-anno-processor:1.0.2");
+
+        if (isKotlin) {
+            project.getExtensions().getByType(KaptExtension.class).arguments(new Closure(null) {
+
+                void doCall() {
+                    KaptAnnotationProcessorOptions options = (KaptAnnotationProcessorOptions) getDelegate();
+                    options.arg("archmage_module_packageName", Utils.getProjectPackageName(project));
+                }
+            });
+        } else {
+            if (app) {
+                project.getExtensions().getByType(AppExtension.class).getApplicationVariants().all(variant ->
+                        variant.getJavaCompile().getOptions().getCompilerArgs()
+                                .add("-Aarchmage_module_packageName=" + Utils.getProjectPackageName(project)));
+            } else {
+                project.getExtensions().getByType(LibraryExtension.class).getLibraryVariants().all(variant ->
+                        variant.getJavaCompile().getOptions().getCompilerArgs()
+                                .add("-Aarchmage_module_packageName=" + Utils.getProjectPackageName(project)));
+            }
+        }
     }
 }

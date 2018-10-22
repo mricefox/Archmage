@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mricefox.archmage.sample.kotlin">
+
+    <application>
+        <activity android:name=".KotlinActivity" />
+        <activity android:name=".JavaActivity" />
+    </application>
+</manifest>

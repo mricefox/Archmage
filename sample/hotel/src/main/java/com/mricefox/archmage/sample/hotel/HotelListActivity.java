@@ -46,5 +46,21 @@ public class HotelListActivity extends AppCompatActivity {
                         });
             }
         });
+
+        findViewById(R.id.go_to_kotlin_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Archmage.transfer(DefaultTargetUriParser.createUri("kotlin", "kotlin"))
+                        .activity().start(HotelListActivity.this);
+            }
+        });
+
+        findViewById(R.id.go_to_java_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Archmage.transfer(DefaultTargetUriParser.createUri("kotlin", "java"))
+                        .activity().start(HotelListActivity.this);
+            }
+        });
     }
 }
