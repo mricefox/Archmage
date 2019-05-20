@@ -13,7 +13,7 @@ Archmage是一个android组件化框架
 - 支持Android gradle plugin 3.0+
 
 原理
-> [android组件化协议管理的一种思路](http://www.mricefox.com/2018/04/24/android-modularity-protocal/)
+> [android组件化协议管理的一种思路](https://mricefox.github.io/2018/04/24/android-modularity-protocal/)
 
 |     module     | archmage-gradle-plugin | archmage-runtime | archmage-annotation |
 | :-------------:| :---------------------:| :--------------: | :-----------------: |
@@ -191,7 +191,9 @@ Archmage.transfer(DefaultTargetUriParser.createUri("share", "ShareArea"))
 
 他们有下面的启动任务和依赖关系
 ![](https://github.com/MrIceFox/Archmage/raw/master/art/sample_boot_task.png)
+
 除白色方块表示的基础组件代码对上层所有组件可见外，其他上层组件（酒店、门票、账号）互相之间并没有依赖关系。这里的酒店组件并不知道账户组件有些什么启动任务，账户组件需要给自己的启动任务设置一个别名暴露给酒店组件
+
 ```java
 public interface AccountBootAlias extends LightBootTaskAlias {
 	//这个接口放在export包里
