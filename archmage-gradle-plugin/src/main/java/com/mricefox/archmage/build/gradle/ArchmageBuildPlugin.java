@@ -109,6 +109,12 @@ public class ArchmageBuildPlugin implements Plugin<Project> {
             public void execute(Project project) {
                 //add action after bundleRelease task to bundle export packages
                 Task bundleReleaseTask = project.getTasks().findByName("bundleRelease");
+                if (bundleReleaseTask == null) {
+                    bundleReleaseTask = project.getTasks().findByName("bundleReleaseAar");
+                }
+                if (bundleReleaseTask == null) {
+                    throw new GradleException("Neither bundleRelease nor bundleReleaseAar was found");
+                }
                 File outputAar = bundleReleaseTask.getOutputs().getFiles().getSingleFile();
                 bundleReleaseTask.doLast(task -> {
                     try {

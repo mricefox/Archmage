@@ -10,11 +10,11 @@ buildscript {
     }
     dependencies {
         if (project.hasProperty('buildPlugin3Enable') && Boolean.valueOf(buildPlugin3Enable)) {
-            classpath "com.android.tools.build:gradle:3.1.2"
+            classpath "com.android.tools.build:gradle:3.2.1"
         } else {
             classpath "com.android.tools.build:gradle:2.3.3"
         }
-        classpath "com.mricefox.archmage.build.gradle:archmage-gradle-plugin:1.1.2"
+        classpath "com.mricefox.archmage.build.gradle:archmage-gradle-plugin:1.1.3"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${KOTLIN_VERSION}"
         // NOTE: Do not place your application dependencies here; they belong
